@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import styles from './Confetti.module.css';
 
-const COLORS = ['#38bdf8','#0ea5e9','#60a5fa','#34d399','#fbbf24','#818cf8','#7dd3fc'];
+const COLORS = ['#fbbf24','#f59e0b','#d97706','#1c1917','#fde68a','#92400e','#fcd34d'];
 
 export function useConfetti() {
   const [pieces, setPieces] = useState([]);

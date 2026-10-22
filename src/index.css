@@ -9,7 +9,7 @@
 body {
   font-family: 'Nunito', sans-serif;
   min-height: 100vh;
-  background: linear-gradient(160deg, #cffafe 0%, #a5f3fc 22%, #7dd3fc 48%, #93c5fd 72%, #c7d2fe 100%);
+  background: linear-gradient(160deg, #fffbeb 0%, #fef3c7 30%, #fde68a 58%, #fef3c7 80%, #fffbeb 100%);
   background-attachment: fixed;
   -webkit-font-smoothing: antialiased;
 }

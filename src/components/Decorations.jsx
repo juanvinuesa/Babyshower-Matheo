@@ -1,66 +1,74 @@
 import styles from './Decorations.module.css';
 
-const SHAPES = [
-  { type: 'circle', size: 28, color: '#38bdf8', opacity: 0.18 },
-  { type: 'ring',   size: 36, color: '#818cf8', opacity: 0.15 },
-  { type: 'star4',  size: 22, color: '#7dd3fc', opacity: 0.20 },
-  { type: 'circle', size: 18, color: '#c7d2fe', opacity: 0.22 },
-  { type: 'star4',  size: 30, color: '#0ea5e9', opacity: 0.14 },
-  { type: 'ring',   size: 24, color: '#93c5fd', opacity: 0.18 },
-  { type: 'circle', size: 40, color: '#a5f3fc', opacity: 0.14 },
-  { type: 'star4',  size: 18, color: '#818cf8', opacity: 0.18 },
-  { type: 'ring',   size: 32, color: '#38bdf8', opacity: 0.13 },
-  { type: 'circle', size: 22, color: '#cffafe', opacity: 0.25 },
-  { type: 'star4',  size: 26, color: '#93c5fd', opacity: 0.16 },
-  { type: 'circle', size: 16, color: '#0ea5e9', opacity: 0.20 },
-];
+function hexPoints(cx, cy, r) {
+  return [0,1,2,3,4,5].map(i => {
+    const a = (i * 60) * Math.PI / 180;
+    return `${cx + r * Math.cos(a)},${cy + r * Math.sin(a)}`;
+  }).join(' ');
+}
 
-function ShapeSVG({ type, size, color, opacity }) {
+function HexSVG({ size, color, opacity, filled }) {
+  const r  = size / 2 - 1;
   const cx = size / 2;
   const cy = size / 2;
-  const r  = size / 2;
-
-  if (type === 'circle') {
-    return (
-      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} xmlns="http://www.w3.org/2000/svg">
-        <circle cx={cx} cy={cy} r={r - 1} fill={color} opacity={opacity} />
-      </svg>
-    );
-  }
-
-  if (type === 'ring') {
-    return (
-      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} xmlns="http://www.w3.org/2000/svg">
-        <circle cx={cx} cy={cy} r={r - 2} fill="none" stroke={color} strokeWidth="2.5" opacity={opacity} />
-      </svg>
-    );
-  }
-
-  if (type === 'star4') {
-    const outer = r - 1;
-    const inner = r * 0.42;
-    const pts = [0, 1, 2, 3].map(i => {
-      const oa = (i * 90 - 90) * (Math.PI / 180);
-      const ia = (i * 90 - 45) * (Math.PI / 180);
-      return [
-        `${cx + outer * Math.cos(oa)},${cy + outer * Math.sin(oa)}`,
-        `${cx + inner * Math.cos(ia)},${cy + inner * Math.sin(ia)}`,
-      ];
-    }).flat().join(' ');
-    return (
-      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} xmlns="http://www.w3.org/2000/svg">
-        <polygon points={pts} fill={color} opacity={opacity} />
-      </svg>
-    );
-  }
-
-  return null;
+  return (
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} xmlns="http://www.w3.org/2000/svg">
+      <polygon
+        points={hexPoints(cx, cy, r)}
+        fill={filled ? color : 'none'}
+        stroke={filled ? 'none' : color}
+        strokeWidth="2"
+        opacity={opacity}
+      />
+    </svg>
+  );
 }
+
+function BeeSVG({ size }) {
+  const s = size;
+  return (
+    <svg width={s} height={s} viewBox="0 0 40 50" xmlns="http://www.w3.org/2000/svg" opacity="0.22">
+      {/* Alas */}
+      <ellipse cx="13" cy="18" rx="12" ry="7" fill="rgba(255,255,255,0.8)" stroke="#d97706" strokeWidth="1"/>
+      <ellipse cx="27" cy="18" rx="12" ry="7" fill="rgba(255,255,255,0.8)" stroke="#d97706" strokeWidth="1"/>
+      {/* Cuerpo */}
+      <ellipse cx="20" cy="36" rx="9" ry="12" fill="#fbbf24" stroke="#d97706" strokeWidth="1"/>
+      {/* Rayas */}
+      <rect x="11" y="31" width="18" height="4" rx="1.5" fill="#92400e" opacity="0.8"/>
+      <rect x="11" y="38" width="18" height="4" rx="1.5" fill="#92400e" opacity="0.8"/>
+      {/* Cabeza */}
+      <circle cx="20" cy="21" r="8" fill="#fbbf24" stroke="#d97706" strokeWidth="1"/>
+      {/* Ojos */}
+      <circle cx="17" cy="20" r="1.5" fill="#1c1917"/>
+      <circle cx="23" cy="20" r="1.5" fill="#1c1917"/>
+      {/* Antenas */}
+      <line x1="18" y1="14" x2="13" y2="6" stroke="#d97706" strokeWidth="1.5" strokeLinecap="round"/>
+      <line x1="22" y1="14" x2="27" y2="6" stroke="#d97706" strokeWidth="1.5" strokeLinecap="round"/>
+      <circle cx="13" cy="5" r="2.5" fill="#d97706"/>
+      <circle cx="27" cy="5" r="2.5" fill="#d97706"/>
+    </svg>
+  );
+}
+
+const ITEMS = [
+  { type: 'hex',    size: 32, color: '#fbbf24', opacity: 0.35, filled: true  },
+  { type: 'hex',    size: 28, color: '#d97706', opacity: 0.25, filled: false },
+  { type: 'bee',    size: 40 },
+  { type: 'hex',    size: 20, color: '#fcd34d', opacity: 0.40, filled: true  },
+  { type: 'hex',    size: 36, color: '#d97706', opacity: 0.20, filled: false },
+  { type: 'bee',    size: 36 },
+  { type: 'hex',    size: 24, color: '#f59e0b', opacity: 0.30, filled: true  },
+  { type: 'hex',    size: 16, color: '#fbbf24', opacity: 0.45, filled: true  },
+  { type: 'bee',    size: 32 },
+  { type: 'hex',    size: 30, color: '#fde68a', opacity: 0.38, filled: true  },
+  { type: 'hex',    size: 22, color: '#f59e0b', opacity: 0.22, filled: false },
+  { type: 'bee',    size: 44 },
+];
 
 export default function Decorations() {
   return (
     <div className={styles.wrap} aria-hidden="true">
-      {SHAPES.map((shape, i) => (
+      {ITEMS.map((item, i) => (
         <div
           key={i}
           className={styles.item}
@@ -70,7 +78,9 @@ export default function Decorations() {
             animationDelay: `${-(i * 1.9)}s`,
           }}
         >
-          <ShapeSVG {...shape} />
+          {item.type === 'bee'
+            ? <BeeSVG size={item.size} />
+            : <HexSVG {...item} />}
         </div>
       ))}
     </div>

@@ -3,8 +3,8 @@ import GiftIcon from './GiftIcon';
 
 function progressGradient(pct) {
   if (pct >= 100) return 'linear-gradient(90deg,#34d399,#10b981)';
-  if (pct >= 60)  return 'linear-gradient(90deg,#fbbf24,#f59e0b)';
-  return                 'linear-gradient(90deg,#38bdf8,#818cf8)';
+  if (pct >= 60)  return 'linear-gradient(90deg,#f59e0b,#d97706)';
+  return                 'linear-gradient(90deg,#fbbf24,#f59e0b)';
 }
 
 function CheckIcon() {
