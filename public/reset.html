@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resetear contadores</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(160deg, #cffafe 0%, #7dd3fc 50%, #c7d2fe 100%);
+    }
+
+    .card {
+      background: rgba(255,255,255,0.9);
+      border-radius: 24px;
+      padding: 2.5rem 2rem;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 360px;
+      text-align: center;
+    }
+
+    .icon { font-size: 3rem; margin-bottom: 0.75rem; }
+
+    h1 {
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: #0284c7;
+      margin-bottom: 0.4rem;
+    }
+
+    p {
+      font-size: 0.85rem;
+      color: #9ca3af;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 2.5px solid #bae6fd;
+      border-radius: 12px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #374151;
+      outline: none;
+      margin-bottom: 1rem;
+      transition: border-color 0.2s;
+    }
+
+    input:focus { border-color: #38bdf8; }
+
+    button {
+      width: 100%;
+      padding: 0.75rem;
+      background: linear-gradient(135deg, #0ea5e9, #38bdf8);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 1rem;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(14,165,233,0.4);
+      transition: transform 0.18s, box-shadow 0.18s;
+    }
+
+    button:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(14,165,233,0.5); }
+    button:active { transform: translateY(0); }
+    button:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    .msg {
+      margin-top: 1rem;
+      padding: 0.75rem;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-weight: 800;
+      display: none;
+    }
+
+    .msg.ok    { background: #d1fae5; color: #065f46; display: block; }
+    .msg.error { background: #fee2e2; color: #991b1b; display: block; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="icon">🔄</div>
+    <h1>Resetear contadores</h1>
+    <p>Ingresá la clave para reiniciar todos los regalos a cero.</p>
+
+    <input type="password" id="secret" placeholder="Clave secreta" />
+    <button id="btn" onclick="reset()">Reiniciar contadores</button>
+    <div class="msg" id="msg"></div>
+  </div>
+
+  <script>
+    async function reset() {
+      const secret = document.getElementById('secret').value.trim();
+      const btn    = document.getElementById('btn');
+      const msg    = document.getElementById('msg');
+
+      if (!secret) return;
+
+      btn.disabled = true;
+      btn.textContent = 'Reiniciando…';
+      msg.className = 'msg';
+
+      try {
+        const res  = await fetch('/api/reset?secret=' + encodeURIComponent(secret));
+        const data = await res.json();
+
+        if (res.ok) {
+          msg.textContent = '✅ ' + data.message;
+          msg.className = 'msg ok';
+          document.getElementById('secret').value = '';
+        } else {
+          msg.textContent = '❌ Clave incorrecta.';
+          msg.className = 'msg error';
+        }
+      } catch {
+        msg.textContent = '❌ Error de conexión.';
+        msg.className = 'msg error';
+      }
+
+      btn.disabled = false;
+      btn.textContent = 'Reiniciar contadores';
+    }
+
+    document.getElementById('secret').addEventListener('keydown', e => {
+      if (e.key === 'Enter') reset();
+    });
+  </script>
+</body>
+</html>
