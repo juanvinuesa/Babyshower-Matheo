@@ -112,13 +112,13 @@
 .btn:disabled { cursor: not-allowed; }
 
 .btnPick {
-  background: linear-gradient(135deg, #f472b6, #c084fc);
+  background: linear-gradient(135deg, #0ea5e9, #38bdf8);
   color: #fff;
-  box-shadow: 0 4px 16px rgba(244, 114, 182, 0.38);
+  box-shadow: 0 4px 16px rgba(14, 165, 233, 0.38);
 }
 
 .btnPick:hover:not(:disabled) {
-  box-shadow: 0 7px 22px rgba(244, 114, 182, 0.52);
+  box-shadow: 0 7px 22px rgba(14, 165, 233, 0.52);
 }
 
 .btnCancel {
