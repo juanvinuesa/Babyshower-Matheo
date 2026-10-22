@@ -8,13 +8,14 @@
 
 .item {
   position: absolute;
+  bottom: -80px;
   animation: floatUp linear infinite;
-  opacity: 0;
+  will-change: transform, opacity;
 }
 
 @keyframes floatUp {
-  0%   { transform: translateY(110vh) rotate(0deg);   opacity: 0;    }
-  6%   { opacity: 0.14; }
-  94%  { opacity: 0.14; }
-  100% { transform: translateY(-8vh)  rotate(360deg); opacity: 0;    }
+  0%   { transform: translateY(0) rotate(0deg) scale(0.85);          opacity: 0; }
+  6%   { opacity: 1; }
+  94%  { opacity: 1; }
+  100% { transform: translateY(calc(-100vh - 100px)) rotate(270deg) scale(1.05); opacity: 0; }
 }
