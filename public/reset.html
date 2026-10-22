@@ -119,6 +119,8 @@
         const data = await res.json();
 
         if (res.ok) {
+          localStorage.removeItem('msw-counts');
+          localStorage.removeItem('msw-picks');
           msg.textContent = '✅ ' + data.message;
           msg.className = 'msg ok';
           document.getElementById('secret').value = '';

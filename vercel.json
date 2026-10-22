@@ -1,5 +1,6 @@
 {
   "rewrites": [
+    { "source": "/reset", "destination": "/reset.html" },
     { "source": "/((?!api/).*)", "destination": "/index.html" }
   ]
 }
