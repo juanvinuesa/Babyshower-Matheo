@@ -1,116 +1,79 @@
 import styles from './GiftCard.module.css';
-import GiftIcon from './GiftIcon';
 
-function progressGradient(pct) {
-  if (pct >= 100) return 'linear-gradient(90deg,#34d399,#10b981)';
-  if (pct >= 60)  return 'linear-gradient(90deg,#f59e0b,#d97706)';
-  return                 'linear-gradient(90deg,#fbbf24,#f59e0b)';
+function Hex({ filled, mine }) {
+  return (
+    <svg viewBox="0 0 24 26" className={styles.hex} aria-hidden="true">
+      <polygon
+        points="12,1 23,7 23,19 12,25 1,19 1,7"
+        className={mine ? styles.hexMine : filled ? styles.hexFilled : styles.hexEmpty}
+      />
+    </svg>
+  );
 }
 
 function CheckIcon() {
   return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
-      stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor"
+      strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <polyline points="2,8 6,12 14,4" />
     </svg>
   );
 }
 
-function LockIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
-      stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <rect x="3" y="7" width="10" height="8" rx="1.5" />
-      <path d="M5 7 V5 A3 3 0 0 1 11 5 V7" />
-    </svg>
-  );
-}
-
-function GiftBtnIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
-      stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <rect x="1" y="7" width="14" height="8" rx="1" />
-      <rect x="4" y="4" width="8" height="3" rx="1" />
-      <line x1="8" y1="4" x2="8" y2="15" />
-      <path d="M8 4 C8 4 5.5 1 5.5 2.5 C5.5 4 8 4 8 4 Z" />
-      <path d="M8 4 C8 4 10.5 1 10.5 2.5 C10.5 4 8 4 8 4 Z" />
-    </svg>
-  );
-}
-
-function PeopleIcon() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
-      stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-      aria-hidden="true" style={{ verticalAlign: 'middle', marginRight: '3px', flexShrink: 0 }}>
-      <path d="M17 21 V19 A4 4 0 0 0 9 19 V21" />
-      <circle cx="11" cy="9" r="4" />
-      <path d="M23 21 V19 A4 4 0 0 0 19 15.35" />
-      <path d="M16 3.13 A4 4 0 0 1 19 7" />
-    </svg>
-  );
-}
-
-function CheckCircleIcon() {
-  return (
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
-      stroke="#10b981" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
-      aria-hidden="true" style={{ verticalAlign: 'middle', marginRight: '2px', flexShrink: 0 }}>
-      <circle cx="12" cy="12" r="10" />
-      <polyline points="8,12 11,15 16,9" />
-    </svg>
-  );
-}
-
-export default function GiftCard({ gift, count, isSelected, onToggle }) {
-  const isFull    = count >= gift.max;
-  const pct       = Math.min((count / gift.max) * 100, 100);
-  const spotsLeft = gift.max - count;
+export default function GiftCard({ gift, count, isMine, hasOtherPick, busy, onChoose, onCancel }) {
+  const limited   = gift.max != null;
+  const isFull    = limited && count >= gift.max;
+  const spotsLeft = limited ? Math.max(gift.max - count, 0) : null;
 
   const cardClass = [
     styles.card,
-    isSelected            ? styles.selected : '',
-    isFull && !isSelected ? styles.full     : '',
+    isMine ? styles.mine : '',
+    isFull && !isMine ? styles.full : '',
   ].join(' ');
 
+  let status;
+  if (!limited) {
+    status = count > 0
+      ? `${count} ${count === 1 ? 'persona lo eligió' : 'personas lo eligieron'}`
+      : 'Sin límite';
+  } else if (isFull) {
+    status = 'Completo';
+  } else {
+    status = `${spotsLeft === 1 ? 'Queda 1 lugar' : `Quedan ${spotsLeft} lugares`} de ${gift.max}`;
+  }
+
   return (
-    <div className={cardClass}>
-      <div className={styles.blob} style={{ background: gift.color }} />
-
-      <GiftIcon category={gift.category} color={gift.color} />
-      <h3 className={styles.name}>{gift.name}</h3>
-      <p className={styles.desc}>{gift.desc}</p>
-
-      <div className={styles.progressRow}>
-        <span className={styles.progressCount}>
-          <PeopleIcon />
-          {count} de {gift.max} personas
-        </span>
-        <span className={`${styles.progressSpots} ${isFull ? styles.done : ''}`}>
-          {isFull
-            ? <><CheckCircleIcon />Completo</>
-            : `${spotsLeft} lugar${spotsLeft !== 1 ? 'es' : ''} libre${spotsLeft !== 1 ? 's' : ''}`}
-        </span>
+    <article className={cardClass}>
+      <div className={styles.body}>
+        <h3 className={styles.name}>{gift.name}</h3>
+        {gift.detail && <p className={styles.detail}>{gift.detail}</p>}
       </div>
 
-      <div className={styles.track}>
-        <div className={styles.fill} style={{ width: `${pct}%`, background: progressGradient(pct) }} />
+      <div className={styles.meter}>
+        {limited && (
+          <div className={styles.hexRow} role="img"
+            aria-label={`${count} de ${gift.max} lugares ocupados`}>
+            {Array.from({ length: gift.max }, (_, i) => (
+              <Hex key={i} filled={i < count} mine={isMine && i === count - 1} />
+            ))}
+          </div>
+        )}
+        <span className={`${styles.status} ${isFull ? styles.statusFull : ''}`}>{status}</span>
       </div>
 
-      {isSelected ? (
-        <button className={`${styles.btn} ${styles.btnCancel}`} onClick={onToggle}>
-          <CheckIcon /> Lo regalo · Cancelar
-        </button>
+      {isMine ? (
+        <div className={styles.mineRow}>
+          <span className={styles.mineTag}><CheckIcon /> Tu regalo</span>
+          <button className={styles.linkBtn} onClick={onCancel} disabled={busy}>Cancelar</button>
+        </div>
       ) : isFull ? (
-        <button className={`${styles.btn} ${styles.btnFull}`} disabled>
-          <LockIcon /> Ya está cubierto
-        </button>
+        <button className={`${styles.btn} ${styles.btnFull}`} disabled>Ya está cubierto</button>
       ) : (
-        <button className={`${styles.btn} ${styles.btnPick}`} onClick={onToggle}>
-          <GiftBtnIcon /> Lo voy a regalar
+        <button className={`${styles.btn} ${hasOtherPick ? styles.btnSwap : styles.btnPick}`}
+          onClick={onChoose} disabled={busy}>
+          {hasOtherPick ? 'Cambiar por este' : 'Lo regalo yo'}
         </button>
       )}
-    </div>
+    </article>
   );
 }

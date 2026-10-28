@@ -1,4 +1,22 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+:root {
+  --cream:      #fff7df;
+  --cream-deep: #fdebb5;
+  --honey:      #f6c453;
+  --honey-deep: #e8962e;
+  --amber:      #c96f1c;
+  --pooh-red:   #c8473d;
+  --pooh-red-d: #a5352d;
+  --ink:        #2d2118;
+  --ink-soft:   #6b5643;
+  --leaf:       #7a9a4f;
+  --card:       #fffdf6;
+  --line:       rgba(201, 111, 28, 0.18);
+  --shadow:     0 10px 30px -12px rgba(140, 80, 20, 0.35);
+  --radius:     22px;
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-script:  'Dancing Script', cursive;
+  --font-body:    'Nunito', system-ui, sans-serif;
+}
 
 *, *::before, *::after {
   box-sizing: border-box;
@@ -6,14 +24,35 @@
   padding: 0;
 }
 
+html { scroll-behavior: smooth; }
+
 body {
-  font-family: 'Nunito', sans-serif;
+  font-family: var(--font-body);
+  color: var(--ink);
   min-height: 100vh;
-  background: linear-gradient(160deg, #fffbeb 0%, #fef3c7 30%, #fde68a 58%, #fef3c7 80%, #fffbeb 100%);
+  background-color: var(--cream);
+  background-image:
+    radial-gradient(circle at 15% 10%, rgba(246, 196, 83, 0.35), transparent 40%),
+    radial-gradient(circle at 90% 35%, rgba(246, 196, 83, 0.25), transparent 45%),
+    radial-gradient(circle at 10% 80%, rgba(232, 150, 46, 0.15), transparent 40%);
   background-attachment: fixed;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
-#root {
-  min-height: 100vh;
+#root { min-height: 100vh; }
+
+button { font: inherit; }
+
+:focus-visible {
+  outline: 3px solid var(--pooh-red);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

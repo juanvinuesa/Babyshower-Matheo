@@ -37,29 +37,39 @@ const ICONS = {
   ),
 };
 
-export default function GiftIcon({ category, color }) {
+// Categorías de la lista de regalos → ícono
+const ALIASES = {
+  ropa: 'clothing',
+  higiene: 'hygiene',
+  panales: 'diapers',
+  blanqueria: 'sleep',
+  alimentacion: 'feeding',
+  paseo: 'gear',
+  originales: 'toys',
+};
+
+export default function GiftIcon({ category, color, size = 52 }) {
   return (
     <div style={{
-      width: '52px',
-      height: '52px',
-      borderRadius: '16px',
+      width: `${size}px`,
+      height: `${size}px`,
+      borderRadius: `${size * 0.3}px`,
       background: color,
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      marginBottom: '0.75rem',
       flexShrink: 0,
       boxShadow: `0 4px 14px ${color}55`,
     }}>
       <svg
-        width="26" height="26" viewBox="0 0 24 24"
+        width={size / 2} height={size / 2} viewBox="0 0 24 24"
         fill="none"
         stroke="rgba(255,255,255,0.92)"
         strokeWidth="1.75"
         xmlns="http://www.w3.org/2000/svg"
         aria-hidden="true"
       >
-        {ICONS[category] ?? ICONS.toys}
+        {ICONS[ALIASES[category] ?? category] ?? ICONS.toys}
       </svg>
     </div>
   );

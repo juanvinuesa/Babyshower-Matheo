@@ -1,32 +1,93 @@
+// Lista de regalos del PDF "Lista de regalos – Baby shower de Matheo".
+// `max` es la cantidad de personas que pueden elegir ese regalo.
+// `max: null` significa sin límite (regalos originales).
+
+export const CATEGORIES = [
+  { id: 'ropa',        name: 'Ropa',                         color: '#e8a13a' },
+  { id: 'higiene',     name: 'Higiene y baño',               color: '#7fb3c8' },
+  { id: 'panales',     name: 'Pañales',                      color: '#d9822b' },
+  { id: 'blanqueria',  name: 'Blanquería',                   color: '#9bbf7a' },
+  { id: 'alimentacion',name: 'Alimentación',                 color: '#d46a5f' },
+  { id: 'paseo',       name: 'Paseo y equipamiento grande',  color: '#b07d4f' },
+  { id: 'originales',  name: 'Regalos originales',           color: '#c9a227' },
+];
+
+function ropa(id, name, sizes) {
+  return sizes.map(([size, max]) => ({
+    id: `${id}-${size}`, category: 'ropa', name, detail: SIZE_LABELS[size], max,
+  }));
+}
+
+// Talles en orden: RN, 0-3, 3-6 meses
+const SIZE_LABELS = { rn: 'Talle RN', '03': 'Talle 0-3 meses', '36': 'Talle 3-6 meses' };
+
 export const GIFTS = [
-  { id:  1, category: 'diapers',   name: "Kit de Pañales",          desc: "Pack de pañales talla RN + toallitas húmedas premium para los primeros días.",      max: 5, color: "#fbbf24" },
-  { id:  2, category: 'hygiene',   name: "Kit de Higiene",           desc: "Shampoo, jabón, crema corporal y colonia especial para bebé.",                      max: 5, color: "#60a5fa" },
-  { id:  3, category: 'clothing',  name: "Pijamas y Bodies",         desc: "Set de pijamas y bodies de algodón suave, talla 0–3 meses.",                        max: 6, color: "#f472b6" },
-  { id:  4, category: 'feeding',   name: "Chupetes",                 desc: "Set de chupetes ortodónticos de silicona para recién nacido.",                       max: 4, color: "#c084fc" },
-  { id:  5, category: 'clothing',  name: "Medias y Manoplas",        desc: "Pack de medias antideslizantes y manoplas antiarañazos para bebé.",                  max: 5, color: "#34d399" },
-  { id:  6, category: 'sleep',     name: "Manta y Arrullo",          desc: "Manta de microfibra súper suave + arrullo para las primeras noches.",                max: 3, color: "#818cf8" },
-  { id:  7, category: 'feeding',   name: "Kit de Mamaderas",         desc: "Set de mamaderas y tetinas anti-cólico de distintos flujos.",                        max: 3, color: "#fb923c" },
-  { id:  8, category: 'clothing',  name: "Ropa 0–3 Meses",           desc: "Conjunto de ropita colorida y cómoda para los primeros meses de vida.",              max: 6, color: "#f472b6" },
-  { id:  9, category: 'clothing',  name: "Ropa 3–6 Meses",           desc: "Conjunto de ropa para cuando Matheo ya vaya creciendo.",                             max: 6, color: "#2dd4bf" },
-  { id: 10, category: 'hygiene',   name: "Toallas y Baberos",        desc: "Set de toallas de baño bordadas y baberos de tela absorbente.",                      max: 4, color: "#84cc16" },
-  { id: 11, category: 'toys',      name: "Sonajeros y Juguetes",     desc: "Set de sonajeros y juguetes sensoriales para estimulación temprana.",                max: 5, color: "#facc15" },
-  { id: 12, category: 'sleep',     name: "Sábanas de Cuna",          desc: "Set de sábanas ajustables y fundas transpirables para cuna o moisés.",              max: 3, color: "#38bdf8" },
-  { id: 13, category: 'feeding',   name: "Almohada de Lactancia",    desc: "Almohada ergonómica en C para lactancia y descanso de mamá.",                       max: 2, color: "#f9a8d4" },
-  { id: 14, category: 'gear',      name: "Portabebé Ergonómico",     desc: "Portabebé o fular ergonómico para salir con Matheo pegadito al pecho.",             max: 1, color: "#6ee7b7" },
-  { id: 15, category: 'health',    name: "Monitor de Bebé",          desc: "Cámara HD con app para vigilar al bebé desde el celular en cualquier momento.",    max: 1, color: "#c4b5fd" },
-  { id: 16, category: 'hygiene',   name: "Bañera Ergonómica",        desc: "Bañera plegable con soporte antideslizante y termómetro de agua integrado.",        max: 1, color: "#7dd3fc" },
-  { id: 17, category: 'health',    name: "Termómetro Digital",       desc: "Termómetro de oído o frente sin contacto, lectura rápida y precisa.",              max: 2, color: "#fca5a5" },
-  { id: 18, category: 'health',    name: "Aspirador Nasal",          desc: "Aspirador nasal eléctrico silencioso para descongestionar fácil al bebé.",          max: 2, color: "#93c5fd" },
-  { id: 19, category: 'sleep',     name: "Sleeping Bag",             desc: "Bolsa de dormir abrigada y segura sin riesgo de destape durante la noche.",         max: 2, color: "#fde68a" },
-  { id: 20, category: 'sleep',     name: "Luz Nocturna",             desc: "Lámpara de noche con luz cálida y sonidos blancos para ayudar a dormir.",           max: 2, color: "#fcd34d" },
-  { id: 21, category: 'furniture', name: "Silla de Comedor",         desc: "Silla alta regulable y fácil de limpiar para cuando empiece con sólidos.",          max: 1, color: "#a7f3d0" },
-  { id: 22, category: 'feeding',   name: "Set Platos y Cubiertos",   desc: "Platos, cuencos y cubiertos de silicona seguros y sin BPA para el bebé.",          max: 3, color: "#fdba74" },
-  { id: 23, category: 'gear',      name: "Mochila Pañalera",         desc: "Mochila organizadora con mudador plegable para salidas y paseos.",                  max: 2, color: "#d8b4fe" },
-  { id: 24, category: 'health',    name: "Mordillos Teethers",       desc: "Set de mordillos de silicona para aliviar la molestia de la dentición.",            max: 4, color: "#6ee7b7" },
-  { id: 25, category: 'hygiene',   name: "Crema Anti-Rozaduras",     desc: "Crema protectora premium para prevenir irritaciones en la zona del pañal.",         max: 5, color: "#fda4af" },
-  { id: 26, category: 'health',    name: "Humidificador",            desc: "Humidificador ultrasónico silencioso para mantener el ambiente del cuarto ideal.",  max: 1, color: "#bae6fd" },
-  { id: 27, category: 'toys',      name: "Libro Sensorial de Tela",  desc: "Libro blando con texturas, colores y sonidos para estimulación temprana.",          max: 4, color: "#fef08a" },
-  { id: 28, category: 'health',    name: "Kit de Cortaúñas",         desc: "Set con cortaúñas, lima y tijeras especialmente diseñadas para bebés.",             max: 3, color: "#c7d2fe" },
-  { id: 29, category: 'toys',      name: "Peluche o Muñeco",         desc: "Peluche suave y seguro para bebé, compañero de sueño y juego.",                     max: 5, color: "#fbcfe8" },
-  { id: 30, category: 'furniture', name: "Móvil para Cuna",          desc: "Móvil musical con figuras coloridas para estimular la visión del bebé.",            max: 2, color: "#a5f3fc" },
+  ...ropa('bodies-corta', 'Bodies manga corta de algodón', [['rn', 4], ['03', 8], ['36', 8]]),
+  ...ropa('bodies-larga', 'Bodies manga larga de algodón', [['rn', 2], ['03', 4], ['36', 4]]),
+  ...ropa('ositos',       'Ositos / enteritos con pie',    [['rn', 2], ['03', 4], ['36', 4]]),
+  ...ropa('ranitas',      'Ranitas / pantaloncitos',       [['rn', 2], ['03', 4], ['36', 4]]),
+  ...ropa('remeritas',    'Remeritas de algodón',          [['rn', 2], ['03', 3], ['36', 3]]),
+  ...ropa('babitas',      'Babitas',                       [['03', 4], ['36', 4]]),
+
+  { id: 'toallitas',     category: 'higiene', name: 'Toallitas húmedas',                   detail: 'Paquetes', max: 10 },
+  { id: 'crema-cola',    category: 'higiene', name: 'Crema para la cola / anti paspaduras', max: 3 },
+  { id: 'oleo',          category: 'higiene', name: 'Óleo calcáreo',                       max: 2 },
+  { id: 'algodon',       category: 'higiene', name: 'Algodón',                             detail: 'Paquetes', max: 4 },
+  { id: 'jabon',         category: 'higiene', name: 'Jabón líquido / shampoo de bebé',     max: 2 },
+  { id: 'toallon',       category: 'higiene', name: 'Toallón con capucha',                 max: 3 },
+  { id: 'banera',        category: 'higiene', name: 'Bañera',                              max: 1 },
+  { id: 'termo-bano',    category: 'higiene', name: 'Termómetro de baño',                  max: 1 },
+  { id: 'termo-digital', category: 'higiene', name: 'Termómetro digital',                  max: 1 },
+  { id: 'aspirador',     category: 'higiene', name: 'Aspirador nasal',                     max: 1 },
+  { id: 'cortaunas',     category: 'higiene', name: 'Tijerita o cortauñas de bebé',        max: 1 },
+  { id: 'cepillo-pelo',  category: 'higiene', name: 'Cepillo de pelo suave',               max: 1 },
+  { id: 'cambiador',     category: 'higiene', name: 'Cambiador portátil',                  max: 1 },
+  { id: 'bolso',         category: 'higiene', name: 'Bolso maternal',                      max: 1 },
+  { id: 'repelente',     category: 'higiene', name: 'Repelente apto bebés',                detail: 'Desde los 6 meses', max: 1 },
+
+  { id: 'panales-rn', category: 'panales', name: 'Pañales talle RN', detail: 'Hasta 4,5 kg · dura 2-3 semanas',   max: 2 },
+  { id: 'panales-p',  category: 'panales', name: 'Pañales talle P',  detail: '3-6 kg · dura 1,5-2 meses',         max: 6 },
+  { id: 'panales-m',  category: 'panales', name: 'Pañales talle M',  detail: '5,5-9,5 kg · dura 2-3 meses',       max: 8 },
+  { id: 'panales-g',  category: 'panales', name: 'Pañales talle G',  detail: '9-12,5 kg · dura 3 meses o más',    max: 8 },
+
+  { id: 'sabanas',      category: 'blanqueria', name: 'Sábanas ajustables de cuna', detail: 'Juego', max: 3 },
+  { id: 'mantitas',     category: 'blanqueria', name: 'Mantitas livianas de algodón', max: 3 },
+  { id: 'frazadita',    category: 'blanqueria', name: 'Frazadita / manta polar',      max: 1 },
+  { id: 'mosquitero',   category: 'blanqueria', name: 'Mosquitero para cuna',         max: 2 },
+
+  { id: 'baberos',        category: 'alimentacion', name: 'Baberos',                   max: 4 },
+  { id: 'crema-pezones',  category: 'alimentacion', name: 'Crema para pezones',        max: 1 },
+  { id: 'almohada',       category: 'alimentacion', name: 'Almohada de lactancia',     max: 1 },
+  { id: 'extractor',      category: 'alimentacion', name: 'Extractor de leche',        max: 1 },
+  { id: 'mamaderas',      category: 'alimentacion', name: 'Mamaderas',                 detail: 'Por si se usan', max: 2 },
+  { id: 'cepillo-mamad',  category: 'alimentacion', name: 'Cepillo para mamaderas',    max: 1 },
+  { id: 'esterilizador',  category: 'alimentacion', name: 'Esterilizador',             max: 1 },
+  { id: 'chupetes',       category: 'alimentacion', name: 'Chupetes',                  detail: 'Opcional · RN y 3 meses', max: 2 },
+
+  { id: 'huevito',    category: 'paseo', name: 'Huevito / butaca para auto', detail: 'Grupo 0+', max: 1 },
+  { id: 'cochecito',  category: 'paseo', name: 'Cochecito',                  max: 1 },
+  { id: 'mochila',    category: 'paseo', name: 'Mochila portabebé',          max: 1 },
+  { id: 'mecedora',   category: 'paseo', name: 'Sillita mecedora / bouncer', max: 1 },
+  { id: 'gimnasio',   category: 'paseo', name: 'Gimnasio de piso',           max: 1 },
+  { id: 'monitor',    category: 'paseo', name: 'Monitor de bebé',            max: 1 },
+
+  { id: 'libros',      category: 'originales', name: 'Libros de tela o de cartón para bebés',          max: null },
+  { id: 'apego',       category: 'originales', name: 'Juguetes de apego, mordillos y sonajeros',       max: null },
+  { id: 'movil',       category: 'originales', name: 'Móvil para cuna',                                max: null },
+  { id: 'huellitas',   category: 'originales', name: 'Kit de huellitas o portarretrato de recién nacido', max: null },
+  { id: 'album',       category: 'originales', name: 'Álbum o libro del bebé para completar',          max: null },
+  { id: 'recuerdos',   category: 'originales', name: 'Cajita de recuerdos', detail: 'Primer chupete, pulsera de la clínica, etc.', max: null },
+  { id: 'personaliz',  category: 'originales', name: 'Ropa personalizada con el nombre Matheo',         max: null },
+  { id: 'panales-xg',  category: 'originales', name: 'Pañales de talles grandes', detail: 'G, XG',     max: null },
+  { id: 'kit-mama',    category: 'originales', name: 'Kit para mamá', detail: 'Cremas, pantuflas, camisón, corpiño de amamantar', max: null },
+  { id: 'giftcard',    category: 'originales', name: 'Gift card de una casa de bebés',                 max: null },
+];
+
+export const GIFTS_BY_ID = Object.fromEntries(GIFTS.map(g => [g.id, g]));
+
+export const TIPS = [
+  'Si dudás del talle, elegí 3-6 meses: siempre se usa.',
+  'Pañales de talle P, M o G nunca sobran.',
+  'Guardá el ticket de cambio con el regalo.',
+  'Preferí algodón y telas frescas: Matheo llega en verano.',
 ];
