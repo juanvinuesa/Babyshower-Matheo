@@ -48,6 +48,23 @@
 }
 .refresh:hover { background: var(--cream-deep); }
 
+.excel {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border: none;
+  background: #1f7a4a;
+  color: #fff;
+  font: inherit;
+  font-weight: 800;
+  padding: 0.35rem 1rem;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 3px 0 #155635;
+}
+.excel:hover:not(:disabled) { background: #238a54; }
+.excel:disabled { opacity: 0.6; cursor: wait; }
+
 .error {
   max-width: 1000px;
   margin: 0 auto 1rem;

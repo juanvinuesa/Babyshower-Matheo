@@ -28,6 +28,7 @@
     "dither-plugin": "^1.1.1",
     "embla-carousel-autoplay": "^8.6.0",
     "embla-carousel-react": "^8.6.0",
+    "exceljs": "^4.4.0",
     "geist": "^1.8.2",
     "jotai": "^3.0.1",
     "lucide-react": "^1.64.0",

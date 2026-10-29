@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { CATEGORIES, GIFTS } from './data/gifts';
 import { RollingNumber } from '@/components/ui/rolling-number';
 import GiftIcon from './components/GiftIcon';
+import { downloadExcel } from './exportExcel';
 import styles from './Lista.module.css';
 
 function pct(n, d) {
@@ -15,6 +16,7 @@ export default function Lista() {
   const [error,   setError]   = useState(false);
   const [updated, setUpdated] = useState(null);
   const [view,    setView]    = useState('all');
+  const [exporting, setExporting] = useState(false);
 
   const fetchCounts = useCallback(async () => {
     try {
@@ -59,6 +61,26 @@ export default function Lista() {
     return { ...c, items, chosen, slots };
   });
 
+  async function handleExport() {
+    setExporting(true);
+    try {
+      await downloadExcel({
+        rows,
+        categories: byCategory,
+        stateLabels: STATE_LABELS,
+        summary: [
+          ['Regalos elegidos', totalChosen],
+          ['Cupos cubiertos', `${slotsTaken} de ${totalSlots} (${pct(slotsTaken, totalSlots)}%)`],
+          ['Regalos completos', `${fullCount} de ${limited.length}`],
+          ['Sin elegir todavía', emptyCount],
+          ['Regalos originales elegidos', originals],
+        ],
+      });
+    } finally {
+      setExporting(false);
+    }
+  }
+
   const filterRow = r =>
     view === 'all' ? true
     : view === 'chosen' ? r.count > 0
@@ -75,6 +97,9 @@ export default function Lista() {
             ? `Actualizado ${updated.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' })} · se refresca solo cada 20 segundos`
             : 'Cargando…'}
           <button className={styles.refresh} onClick={fetchCounts}>Actualizar</button>
+          <button className={styles.excel} onClick={handleExport} disabled={loading || exporting}>
+            <DownloadIcon /> {exporting ? 'Generando…' : 'Descargar Excel'}
+          </button>
         </p>
       </header>
 
@@ -173,6 +198,15 @@ export default function Lista() {
         </main>
       )}
     </div>
+  );
+}
+
+function DownloadIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M12 4 V15 M7 10 L12 15 L17 10 M5 20 H19" />
+    </svg>
   );
 }
 
