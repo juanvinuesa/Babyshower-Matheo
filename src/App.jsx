@@ -50,6 +50,14 @@ export default function App() {
   }
 
   const visible = CATEGORIES.filter(c => filter === 'all' || c.id === filter);
+
+  const limited    = GIFTS.filter(g => g.max != null);
+  const totalSlots = limited.reduce((s, g) => s + g.max, 0);
+  const slotsTaken = limited.reduce((s, g) => s + Math.min(counts[g.id] || 0, g.max), 0);
+  const progress   = totalSlots ? Math.round((slotsTaken / totalSlots) * 100) : 0;
+
+  // Lo disponible primero; los regalos completos van al final
+  const isFull = g => g.max != null && (counts[g.id] || 0) >= g.max && myPick !== g.id;
   const myGift = myPick ? GIFTS_BY_ID[myPick] : null;
 
   return (
@@ -70,6 +78,18 @@ export default function App() {
                 regalar lo mismo hasta completar la cantidad que necesitamos: los
                 panales de miel muestran cuántos lugares quedan.
               </p>
+              {!loading && !error && (
+                <div className={styles.progress}>
+                  <div className={styles.progressBar} role="progressbar"
+                    aria-valuenow={progress} aria-valuemin={0} aria-valuemax={100}
+                    aria-label="Avance de la lista de regalos">
+                    <div className={styles.progressFill} style={{ width: `${progress}%` }} />
+                  </div>
+                  <span className={styles.progressText}>
+                    <strong>{slotsTaken}</strong> de {totalSlots} regalos ya tienen quién los regale
+                  </span>
+                </div>
+              )}
             </div>
           </section>
 
@@ -109,7 +129,9 @@ export default function App() {
                   <p className={styles.catNote}>Ideas sin límite de cantidad, por si querés sorprender.</p>
                 )}
                 <div className={styles.grid}>
-                  {GIFTS.filter(g => g.category === cat.id).map(gift => (
+                  {GIFTS.filter(g => g.category === cat.id)
+                    .sort((a, b) => isFull(a) - isFull(b))
+                    .map(gift => (
                     <GiftCard
                       key={gift.id}
                       gift={gift}

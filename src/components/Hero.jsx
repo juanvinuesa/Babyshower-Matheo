@@ -1,3 +1,4 @@
+import Countdown from './Countdown';
 import styles from './Hero.module.css';
 
 const MAPS_URL =
@@ -85,6 +86,8 @@ export default function Hero() {
               <dd className={styles.whenScript}>17:00 hs</dd>
             </div>
           </dl>
+
+          <Countdown />
 
           <div className={styles.place}>
             <p className={styles.placeName}>Quinta Samadhi</p>
