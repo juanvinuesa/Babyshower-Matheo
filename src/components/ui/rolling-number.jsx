@@ -3,6 +3,7 @@ import { motion, useSpring, useTransform } from "motion/react";
 
 export function RollingNumber({
   value,
+  from,
   mass = 0.8,
   stiffness = 75,
   damping = 15,
@@ -11,7 +12,8 @@ export function RollingNumber({
   onAnimationStart,
   onAnimationComplete
 }) {
-  const spring = useSpring(value, { mass, stiffness, damping })
+  // `from` hace que el número arranque desde ese valor al montarse
+  const spring = useSpring(from ?? value, { mass, stiffness, damping })
   const display = useTransform(spring, (current) =>
     format(parseFloat(current.toFixed(precision)))
   )

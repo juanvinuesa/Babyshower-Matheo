@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { CATEGORIES, GIFTS } from './data/gifts';
+import { RollingNumber } from '@/components/ui/rolling-number';
 import GiftIcon from './components/GiftIcon';
 import styles from './Lista.module.css';
 
@@ -87,8 +88,8 @@ export default function Lista() {
         <main className={styles.main}>
           <section className={styles.stats}>
             <Stat label="Regalos elegidos" value={totalChosen} note="personas que ya eligieron" />
-            <Stat label="Cupos cubiertos" value={`${slotsTaken} / ${totalSlots}`} note={`${pct(slotsTaken, totalSlots)}% de la lista`} />
-            <Stat label="Regalos completos" value={`${fullCount} / ${limited.length}`} note="llegaron a su cupo" />
+            <Stat label="Cupos cubiertos" value={slotsTaken} total={totalSlots} note={`${pct(slotsTaken, totalSlots)}% de la lista`} />
+            <Stat label="Regalos completos" value={fullCount} total={limited.length} note="llegaron a su cupo" />
             <Stat label="Sin elegir todavía" value={emptyCount} note="nadie los eligió" />
             <Stat label="Regalos originales" value={originals} note="elegidos (sin límite)" />
           </section>
@@ -109,7 +110,7 @@ export default function Lista() {
                   </div>
                   {c.slots > 0
                     ? <Bar value={Math.min(c.chosen, c.slots)} max={c.slots} color={c.color} />
-                    : <span className={styles.openCount}>{c.chosen} elegidos</span>}
+                    : <span className={styles.openCount}><Num value={c.chosen} /> elegidos</span>}
                 </div>
               ))}
             </div>
@@ -157,7 +158,7 @@ export default function Lista() {
                             <span className={styles.giftName}>{r.name}</span>
                             {r.detail && <span className={styles.detail}>{r.detail}</span>}
                           </td>
-                          <td className={styles.num}><strong>{r.count}</strong></td>
+                          <td className={styles.num}><strong><Num value={r.count} /></strong></td>
                           <td className={styles.num}>{r.max ?? 'Libre'}</td>
                           <td className={styles.num}>{r.max == null ? '-' : Math.max(r.max - r.count, 0)}</td>
                           <td><StateBadge state={r.state} /></td>
@@ -175,11 +176,17 @@ export default function Lista() {
   );
 }
 
-function Stat({ label, value, note }) {
+function Num({ value }) {
+  return <RollingNumber value={value} from={0} />;
+}
+
+function Stat({ label, value, total, note }) {
   return (
     <div className={styles.stat}>
       <span className={styles.statLabel}>{label}</span>
-      <strong className={styles.statValue}>{value}</strong>
+      <strong className={styles.statValue}>
+        <Num value={value} />{total != null && ` / ${total}`}
+      </strong>
       <span className={styles.statNote}>{note}</span>
     </div>
   );
@@ -192,7 +199,7 @@ function Bar({ value, max, color, big }) {
       <div className={`${styles.bar} ${big ? styles.barBig : ''}`}>
         <div className={styles.barFill} style={{ width: `${p}%`, background: color }} />
       </div>
-      <span className={styles.barText}>{value} / {max} · {p}%</span>
+      <span className={styles.barText}><Num value={value} /> / {max} · <Num value={p} />%</span>
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { CATEGORIES, GIFTS, GIFTS_BY_ID, TIPS } from './data/gifts';
 import { useGiftRegistry } from './hooks/useGiftRegistry';
+import { RollingNumber } from '@/components/ui/rolling-number';
 import Hero from './components/Hero';
 import GiftCard from './components/GiftCard';
 import GiftIcon from './components/GiftIcon';
@@ -86,7 +87,7 @@ export default function App() {
                     <div className={styles.progressFill} style={{ width: `${progress}%` }} />
                   </div>
                   <span className={styles.progressText}>
-                    <strong>{slotsTaken}</strong> de {totalSlots} regalos ya tienen quién los regale
+                    <strong><RollingNumber value={slotsTaken} from={0} /></strong> de {totalSlots} regalos ya tienen quién los regale
                   </span>
                 </div>
               )}
